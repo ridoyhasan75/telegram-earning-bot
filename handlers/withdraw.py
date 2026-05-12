@@ -18,9 +18,16 @@ async def cmd_withdraw(message: Message):
     if user['is_banned']:
         return
 
-    if user['valid_referrals'] < settings['min_withdraw_referrals']:
+    if user['valid_referrals'] < 5:
         await message.answer(
-            f"❌ পেমেন্ট রিকোয়েস্ট দিতে আপনার কমপক্ষে {settings['min_withdraw_referrals']} টি ভ্যালিড রেফার লাগবে।\n"
+            "❌ পেমেন্ট রিকোয়েস্ট দিতে আপনার কমপক্ষে ৫ টি ভ্যালিড রেফার লাগবে।\n"
+            f"আপনার বর্তমান ভ্যালিড রেফার: {user['valid_referrals']}"
+        )
+        return
+    elif user['valid_referrals'] >= 5 and user['valid_referrals'] < 15:
+        remaining = 15 - user['valid_referrals']
+        await message.answer(
+            f"❌ পেমেন্ট রিকোয়েস্ট দিতে আপনার আরও {remaining} টি ভ্যালিড রেফার লাগবে।\n"
             f"আপনার বর্তমান ভ্যালিড রেফার: {user['valid_referrals']}"
         )
         return

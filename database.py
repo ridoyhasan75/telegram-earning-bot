@@ -63,7 +63,7 @@ async def complete_task(user_id, reward):
         if user and not user['tasks_completed']:
             await db.execute('UPDATE users SET tasks_completed = 1, balance = balance + ? WHERE user_id = ?', (reward, user_id))
             if user['referred_by']:
-                await db.execute('UPDATE users SET valid_referrals = valid_referrals + 1 WHERE user_id = ?', (user['referred_by'],))
+                await db.execute('UPDATE users SET valid_referrals = valid_referrals + 1, balance = balance + 10 WHERE user_id = ?', (user['referred_by'],))
             await db.commit()
             return True
         return False
