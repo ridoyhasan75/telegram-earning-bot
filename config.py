@@ -9,7 +9,7 @@ ADMIN_ID = int(os.getenv("ADMIN_ID", 0))
 DB_NAME = "database.sqlite"
 
 CHANNELS = [
-    "@rjteamofficial",
+    "@rjvipteam111",
     "@takaincome1205",
     "@takaincomevip12"
 ]
