@@ -18,22 +18,20 @@ async def cmd_withdraw(message: Message):
     if user['is_banned']:
         return
 
-    if user['valid_referrals'] < 5:
+    if user['balance'] < 200:
         await message.answer(
-            "❌ পেমেন্ট রিকোয়েস্ট দিতে আপনার কমপক্ষে ৫ টি ভ্যালিড রেফার লাগবে।\n"
-            f"আপনার বর্তমান ভ্যালিড রেফার: {user['valid_referrals']}"
+            "❌ পেমেন্ট রিকোয়েস্ট দিতে আপনার ব্যালেন্সে কমপক্ষে ২০০ টাকা থাকতে হবে।\n"
+            f"আপনার বর্তমান ব্যালেন্স: {user['balance']} টাকা"
         )
         return
-    elif user['valid_referrals'] >= 5 and user['valid_referrals'] < 15:
-        remaining = 15 - user['valid_referrals']
+
+    target_referrals = 10
+    if user['valid_referrals'] < target_referrals:
+        remaining = target_referrals - user['valid_referrals']
         await message.answer(
-            f"❌ পেমেন্ট রিকোয়েস্ট দিতে আপনার আরও {remaining} টি ভ্যালিড রেফার লাগবে।\n"
+            f"❌ উইথড্র করতে আপনাকে আরও {remaining} টি রেফার করতে হবে।\n"
             f"আপনার বর্তমান ভ্যালিড রেফার: {user['valid_referrals']}"
         )
-        return
-        
-    if user['balance'] <= 0:
-        await message.answer("❌ আপনার ব্যালেন্স নেই।")
         return
 
     await message.answer("পেমেন্ট মেথড সিলেক্ট করুন:", reply_markup=withdraw_methods_menu())
@@ -77,8 +75,8 @@ async def process_withdraw_amount(message: Message, state: FSMContext):
     user_id = message.from_user.id
     user = await db.get_user(user_id)
     
-    if amount < 50:
-        await message.answer("❌ সর্বনিম্ন ৫০ টাকা তুলতে পারবেন।")
+    if amount < 200:
+        await message.answer("❌ সর্বনিম্ন ২০০ টাকা তুলতে পারবেন।")
         return
         
     if amount > user['balance']:
